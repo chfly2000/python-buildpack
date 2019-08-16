@@ -815,6 +815,11 @@ func (s *Supplier) shouldRunPip() (bool, string, error) {
 		return false, "", nil
 	}
 
+	installArgs := []string{"-m", "pip", "install", "Cython", "--ignore-installed", "--exists-action=w", "--src=" + filepath.Join(s.Stager.DepDir(), "src")}
+	if err := s.Command.Execute(s.Stager.BuildDir(), indentWriter(os.Stdout), indentWriter(os.Stderr), "python", installArgs...); err != nil {
+		return false, "", fmt.Errorf("could not install cython: %v", err)
+	}
+
 	return true, requirementsPath, nil
 }
 

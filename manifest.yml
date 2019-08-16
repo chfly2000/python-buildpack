@@ -230,7 +230,7 @@ dependencies:
   source_sha256: d63e63e14e6d29e17490abbe6f7d17afb3db182dbd801229f14e55f4157c4ba3
 - name: mecab
   version: 0.996
-  uri: https://raw.githubusercontent.com/chfly2000/python-buildpack/master/fixtures/mecab/mecab-0.996.tgz
+  uri: https://raw.githubusercontent.com/chfly2000/python-buildpack/cython/fixtures/mecab/mecab-0.996.tgz
   sha256: e5ad542dced00342b280f0c58a3e9825fa26abf3c936e470f6727381192aeb56
   cf_stacks:
   - cflinuxfs2
