@@ -96,6 +96,11 @@ func RunPython(s *Supplier) error {
 		return err
 	}
 
+	if err := s.InstallMecab(); err != nil {
+		s.Log.Error("Could not install mecab: %v", err)
+		return err
+	}
+
 	if err := s.InstallPipPop(); err != nil {
 		s.Log.Error("Could not install pip pop: %v", err)
 		return err
@@ -297,6 +302,37 @@ func (s *Supplier) InstallPython() error {
 		return err
 	}
 	if err := os.Setenv("PYTHONPATH", filepath.Join(s.Stager.DepDir())); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *Supplier) InstallMecab() error {
+	var dep libbuildpack.Dependency
+
+	dep.Name = "mecab"
+	dep.Version = "0.996"
+
+	mecabInstallDir := filepath.Join(s.Stager.DepDir(), "mecab")
+	if err := s.Installer.InstallDependency(dep, mecabInstallDir); err != nil {
+		return err
+	}
+
+	if err := s.Stager.LinkDirectoryInDepDir(filepath.Join(mecabInstallDir, "bin"), "bin"); err != nil {
+		return err
+	}
+	if err := s.Stager.LinkDirectoryInDepDir(filepath.Join(mecabInstallDir, "lib"), "lib"); err != nil {
+		return err
+	}
+	if err := s.Stager.LinkDirectoryInDepDir(filepath.Join(mecabInstallDir, "include"), "include"); err != nil {
+		return err
+	}
+	if err := s.Stager.LinkDirectoryInDepDir(filepath.Join(mecabInstallDir, "etc"), "etc"); err != nil {
+		return err
+	}
+
+	if err := os.Setenv("LD_LIBRARY_PATH", fmt.Sprintf("%s:%s", filepath.Join(s.Stager.DepDir(), "lib"), os.Getenv("LD_LIBRARY_PATH"))); err != nil {
 		return err
 	}
 
